@@ -42,7 +42,8 @@ public class Account implements Serializable {
     @Column
     private long balance;
 
-    @OneToOne(mappedBy = "account")
+//    @ManyToOne
+    @ManyToOne
     private Client client;
 
 //    @OneToMany(mappedBy = "ReciverAccount")

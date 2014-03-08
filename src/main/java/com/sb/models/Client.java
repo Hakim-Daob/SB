@@ -35,6 +35,7 @@ import javax.persistence.Table;
 
 public class Client implements Serializable {
    
+   
     
 
     @Id
@@ -67,11 +68,9 @@ public class Client implements Serializable {
     @Column
     private String phoneNumber;
     
-//     @OneToMany(mappedBy = "client")
-//    private List<Account> accounts;
-    
-    @OneToOne
-    private Account account;
+
+    @OneToMany(mappedBy = "client")
+    private List<Account> accounts;
     
      public long getClientId() {
         return clientId;
@@ -183,13 +182,17 @@ public class Client implements Serializable {
 
 //    
     
-     public Account getAccount() {
-        return account;
+
+    
+     public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
+    
+
     
      public void saveUser() {
         ObjectDao userDao = new ObjectDao();

@@ -8,6 +8,8 @@ package com.sb.run;
 
 import com.sb.models.Account;
 import com.sb.models.Client;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,14 +17,18 @@ import com.sb.models.Client;
  */
 public class Test {
     public static void main(String[] args) {
-
+        
+        
+        List<Account> accounts;
+        accounts = new ArrayList<Account>();
         Account a2 = new Account();
         a2.setAccountNumber(123);
         a2.setBalance(1000);
         a2.setClient(null);
         a2.setName(null);
         a2.saveUser();
-        
+        accounts.add(a2);
+
         Client c = new Client();
         c.setFirstName("Hakim");
         c.setLastName("Aldaoub");
@@ -30,16 +36,16 @@ public class Test {
         c.setNationality("Libyan");
         c.setEmail("comscide@yahoo.com");
         c.setPassword("123");
-        c.setAccount(a2);
+        c.setAccounts(accounts);
         c.setPhoneNumber("4389924227");
         
         c.saveUser();
         
         
         Account a = new Account();
-        a.setAccountNumber(123);
+        a.setAccountNumber(456);
         a.setBalance(1000);
-        a.setClient(null);
+        a.setClient(c);
         a.setName(null);
         
         a.saveUser();
