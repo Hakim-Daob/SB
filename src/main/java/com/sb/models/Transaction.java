@@ -12,6 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,7 +28,7 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "transaction")
-//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 
 public class Transaction implements Serializable {
 
@@ -40,18 +42,17 @@ public class Transaction implements Serializable {
     @Column
     private long transactionAmount;
 
+    @ManyToOne
+    private Account account;
+
 //    @ManyToOne
 //    @JoinColumn(name = "accountNumber")
-    
 //    @OneToOne
 //    private Account SenderAccount;
-
 //    @ManyToOne
 //    @JoinColumn(name = "accountNumber")
-    
 //    @OneToOne
 //    private Account ReciverAccount;
-
     public long getTransactionId() {
         return transactionId;
     }
@@ -83,9 +84,6 @@ public class Transaction implements Serializable {
 //    public void setReciverAccount(Account ReciverAccount) {
 //        this.ReciverAccount = ReciverAccount;
 //    }
-
-  
-
     public long getTransactionAmount() {
         return transactionAmount;
     }

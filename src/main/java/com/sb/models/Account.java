@@ -45,6 +45,11 @@ public class Account implements Serializable {
 //    @ManyToOne
     @ManyToOne
     private Client client;
+    
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> transactions; 
+    
+    
 
 //    @OneToMany(mappedBy = "ReciverAccount")
 //    private List<Transaction> transactions1;

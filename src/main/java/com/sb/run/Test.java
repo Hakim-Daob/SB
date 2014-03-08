@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.sb.run;
 
 import com.sb.models.Account;
 import com.sb.models.Client;
+import com.sb.models.Transaction;
+import com.sb.models.Withdraw;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,9 @@ import java.util.List;
  * @author HMD
  */
 public class Test {
+
     public static void main(String[] args) {
-        
-        
+
         List<Account> accounts;
         accounts = new ArrayList<Account>();
         Account a2 = new Account();
@@ -38,17 +39,18 @@ public class Test {
         c.setPassword("123");
         c.setAccounts(accounts);
         c.setPhoneNumber("4389924227");
-        
+
         c.saveUser();
-        
-        
+
         Account a = new Account();
         a.setAccountNumber(456);
         a.setBalance(1000);
         a.setClient(c);
         a.setName(null);
+
+        Withdraw withdraw = new Withdraw();
+        withdraw.withdrawMoney(50, a);
         
         a.saveUser();
-        
     }
 }
