@@ -21,6 +21,6 @@
         <mapping class="com.sb.models.Client"/>
         <mapping class="com.sb.models.Transaction"/>
         <mapping class="com.sb.models.Withdraw"/>
-        
+        <mapping class="com.sb.models.Transfer"/>
   </session-factory>
 </hibernate-configuration>

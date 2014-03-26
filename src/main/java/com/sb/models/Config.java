@@ -10,6 +10,9 @@ package com.sb.models;
  *
  * @author HMD
  */
-public class Chequingaccount extends Account {
+public class Config {
+    
+    public static double INTEREST_RATE=0.2;
+   
     
 }

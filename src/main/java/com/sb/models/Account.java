@@ -7,14 +7,18 @@ package com.sb.models;
 
 import com.sb.dao.ObjectDao;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -42,14 +46,13 @@ public class Account implements Serializable {
     @Column
     private long balance;
 
-//    @ManyToOne
     @ManyToOne
+//    ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+//    @JoinColumn(nullable = false)             
     private Client client;
-    
+
     @OneToMany(mappedBy = "account")
-    private List<Transaction> transactions; 
-    
-    
+    private List<Transaction> transactions;
 
 //    @OneToMany(mappedBy = "ReciverAccount")
 //    private List<Transaction> transactions1;
@@ -100,6 +103,14 @@ public class Account implements Serializable {
         this.client = client;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
 //    public List<Transaction> getTransactions() {
 //        return transactions;
 //    }
@@ -115,9 +126,23 @@ public class Account implements Serializable {
 //    public void setTransactions1(List<Transaction> transactions1) {
 //        this.transactions1 = transactions1;
 //    }
-    public void saveUser() {
+    public void creatAccountById(long idNumber, long balance)
+    {
+        Client client1 = Client.getClientById(idNumber);
+        Account account1 = new Account();
+        account1.setBalance(balance);
+        account1.setClient(client1);
+        account1.setTransactions(null);
+        account1.saveAccount();
+    }
+    public long saveAccount() {
         ObjectDao userDao = new ObjectDao();
-        userDao.addObject(this);
+        return userDao.addObject(this);
+    }
+     public void updateAccount() throws IllegalAccessException, InvocationTargetException {
+        ObjectDao<Account> accountDao = new ObjectDao<Account>();
+        
+        accountDao.updateObject(this,this.getAccountNumber(),Account.class);
     }
 
 }

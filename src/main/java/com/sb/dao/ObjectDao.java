@@ -5,8 +5,11 @@
  */
 package com.sb.dao;
 
-//import com.soen.employeeinheritance.models.*;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import javassist.bytecode.stackmap.TypeData.ClassName;
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,30 +18,35 @@ import org.hibernate.cfg.Configuration;
 
 /**
  *
- * @author Hakim
+ * @author Khalid
  */
-public class ObjectDao {
+public class ObjectDao<T> {
 
     private static SessionFactory factory;
-    private String message;
-    
+    private T t;
+     public T get(){
+        return this.t;
+    }
+     
+    public void set(T t1){
+        this.t=t1;
+    }
 
     public ObjectDao() {
-        message="";
+        makeSessionFactory();
+    }
+
+    public static void makeSessionFactory() {
+
         try {
             factory = new Configuration().configure().buildSessionFactory();
         } catch (HibernateException ex) {
-           message="Failed to create sessionFactory object." + ex;
+
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-
-    public Long addObject(Object object) {
+    public static Long addObject(Object object) {
         Session session = factory.openSession();
         Transaction tx = null;
         Long physicianID = null;
@@ -46,7 +54,6 @@ public class ObjectDao {
             tx = session.beginTransaction();
             // Adding Object
             physicianID = (Long) session.save(object);
-            this.message = "Info addes Successfully!";
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -58,7 +65,27 @@ public class ObjectDao {
         }
         return physicianID;
     }
-    
+
+    public void addOrUpdateObject(Object object,long id,Class<T> ClassName) throws IllegalAccessException, InvocationTargetException {
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            // Adding Object
+             this.t = (T) session.get(ClassName, id);
+            BeanUtils.copyProperties(t, object);
+            session.saveOrUpdate(t);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+    }
     /* Method to  READ all the Physicians */
 
     public ArrayList getAllObjects(String tableName) {
@@ -68,8 +95,7 @@ public class ObjectDao {
         try {
             tx = session.beginTransaction();
             // Get All Physicians 
-          objects = (ArrayList) session.createQuery("FROM " + tableName).list();
-           this.message = "Records retrieved Successfully!";
+            objects = (ArrayList) session.createQuery("FROM " + tableName).list();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -83,14 +109,15 @@ public class ObjectDao {
     }
     /* Method to UPDATE salary for an employee */
 
-    public void updateObject(Object object) {
+    public  void updateObject(Object object,long id,Class<T> ClassName) throws IllegalAccessException, InvocationTargetException {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             // Update Object
-            session.update(object);
-             this.message = "Info updated Successfully!";
+             this.t = (T) session.get(ClassName, id);
+            BeanUtils.copyProperties(t, object);
+            session.update(t);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -103,14 +130,15 @@ public class ObjectDao {
     }
     /* Method to DELETE an employee from the records */
 
-    public void deleteObject(Object object) {
+    public void deleteObject(Object object,long id,Class<T> ClassName) throws IllegalAccessException, InvocationTargetException {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             // Deleting Object
-            session.delete(object);
-            this.message = "Info deleted Successfully!";
+            this.t = (T) session.load(ClassName, id);
+            session.delete(t);
+            session.flush();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {

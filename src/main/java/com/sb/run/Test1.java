@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package com.sb.models;
+package com.sb.run;
 
 /**
  *
  * @author HMD
  */
-public class Chequingaccount extends Account {
+public class Test1 {
     
 }

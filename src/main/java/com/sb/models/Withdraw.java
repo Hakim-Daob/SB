@@ -29,9 +29,9 @@ import javax.persistence.Table;
 public class Withdraw extends Transaction implements Serializable {
 
     public void withdrawMoney(long amount, Account account) {
-        long temp = account.getBalance();
-        temp = temp - amount;
-        account.setBalance(temp);
-
+        long balance = account.getBalance();
+        balance  -= amount;
+        account.setBalance(balance);
+        
     }
 }
